@@ -1,0 +1,112 @@
+import { ArrowUpRight, Mail, MapPin, MessageCircle } from 'lucide-react';
+import { site, type Dict, type Language } from '../i18n/dictionaries';
+import { FadeIn } from '../components/FadeIn';
+import { Magnet } from '../components/Magnet';
+
+export function Contact({ dict, lang }: { dict: Dict; lang: Language }) {
+  const whatsappUrl = lang === 'en' ? site.whatsappPrefilledEn : site.whatsappPrefilledEs;
+  const emailSubject =
+    lang === 'en' ? 'Project inquiry — SolutionsHub' : 'Consulta de proyecto — SolutionsHub';
+
+  return (
+    <section
+      id="contact"
+      className="relative z-10 -mt-10 sm:-mt-14 bg-bg rounded-t-[40px] sm:rounded-t-[60px] px-5 sm:px-8 pt-24 sm:pt-32 pb-16 grain overflow-hidden"
+    >
+      <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[720px] h-[360px] rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.06),transparent_68%)]" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <FadeIn className="mb-14 max-w-3xl">
+          <span className="eyebrow text-accent">{dict.contact.eyebrow}</span>
+          <h2 className="display-heading text-5xl sm:text-7xl md:text-[6.25rem] mt-4 mb-6">
+            {dict.contact.title}
+          </h2>
+          <p className="text-[15px] sm:text-base text-fg-muted leading-relaxed max-w-xl">
+            {dict.contact.description}
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.08} className="mb-16">
+          <a
+            href={`mailto:${site.email}?subject=${encodeURIComponent(emailSubject)}`}
+            className="group inline-flex items-center gap-3 font-display text-2xl sm:text-4xl md:text-5xl text-fg hover:text-accent transition-colors break-all"
+          >
+            {site.email}
+            <ArrowUpRight className="w-6 h-6 sm:w-9 sm:h-9 shrink-0 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </a>
+        </FadeIn>
+
+        <div className="grid sm:grid-cols-3 gap-4 mb-14">
+          {[
+            {
+              icon: <MessageCircle className="w-5 h-5" />,
+              label: dict.contact.whatsappLabel,
+              value: site.phoneDisplay,
+              href: whatsappUrl,
+              external: true,
+            },
+            {
+              icon: <Mail className="w-5 h-5" />,
+              label: dict.contact.emailLabel,
+              value: site.email,
+              href: `mailto:${site.email}?subject=${encodeURIComponent(emailSubject)}`,
+              external: false,
+            },
+            {
+              icon: <MapPin className="w-5 h-5" />,
+              label: dict.contact.locationLabel,
+              value: dict.contact.location,
+            },
+          ].map((c, i) => {
+            const inner = (
+              <div className="h-full rounded-2xl border border-line bg-bg-elev p-6 hover:border-line-strong transition-colors">
+                <div className="text-accent mb-4">{c.icon}</div>
+                <div className="font-mono text-[10px] uppercase tracking-widest text-fg-dim mb-1.5">
+                  {c.label}
+                </div>
+                <div className="text-sm text-fg leading-relaxed break-words">{c.value}</div>
+              </div>
+            );
+            return (
+              <FadeIn key={c.label} delay={i * 0.06}>
+                {c.href ? (
+                  <a
+                    href={c.href}
+                    target={c.external ? '_blank' : undefined}
+                    rel={c.external ? 'noopener noreferrer' : undefined}
+                    className="block h-full"
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  inner
+                )}
+              </FadeIn>
+            );
+          })}
+        </div>
+
+        <FadeIn delay={0.1} className="flex flex-wrap gap-3">
+          <Magnet padding={60} strength={8}>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-[#0A0A0B] hover:bg-fg transition-colors"
+            >
+              {dict.contact.ctaWhatsapp}
+              <ArrowUpRight className="w-4 h-4" />
+            </a>
+          </Magnet>
+          <a
+            href={`mailto:${site.email}?subject=${encodeURIComponent(emailSubject)}`}
+            className="inline-flex items-center gap-2 rounded-full border border-line-strong px-7 py-3.5 text-sm font-medium text-fg hover:border-accent hover:text-accent transition-colors"
+          >
+            <Mail className="w-4 h-4" />
+            {dict.contact.ctaEmail}
+          </a>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
